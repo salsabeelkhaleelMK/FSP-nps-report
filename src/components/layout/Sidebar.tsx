@@ -1,4 +1,4 @@
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '@/hooks/useLanguage';
 import {
   LayoutDashboard,
   MessageSquare,
@@ -14,8 +14,9 @@ import {
   UsersRound,
   Network,
 } from 'lucide-react';
+import type { NavItem } from '@/lib/types';
 
-const NAV_ITEMS = [
+const NAV_ITEMS: NavItem[] = [
   { key: 'nav_dashboard', icon: LayoutDashboard, translationKey: 'dashboard' },
   { key: 'nav_customer_review', icon: MessageSquare, badge: 0, badgeColor: 'orange' },
   { key: 'nav_live_review', icon: Radio },
@@ -34,18 +35,18 @@ const NAV_ITEMS = [
 /**
  * Sidebar navigation component
  */
-export function Sidebar({ className = '' }) {
+export function Sidebar({ className = '' }: { className?: string }) {
   const { t } = useLanguage();
 
   return (
-    <aside className={`sidebar ${className}`}>
-      <div className="sidebar-logo">
+    <aside className={`sidebar ${className}`} data-testid="sidebar">
+      <div className="sidebar-logo" data-testid="sidebar-logo">
         <span className="logo-text">FidSpar</span>
         <span className="logo-k">K</span>
         <span className="logo-accent">'</span>
       </div>
       
-      <nav className="sidebar-nav">
+      <nav className="sidebar-nav" data-testid="sidebar-nav">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           return (
@@ -54,6 +55,7 @@ export function Sidebar({ className = '' }) {
               href="#"
               className={`nav-item ${item.active ? 'active' : ''}`}
               onClick={(e) => e.preventDefault()}
+              data-testid={`nav-item-${item.key}`}
             >
               <Icon size={20} strokeWidth={1.5} />
               <span className="nav-label">{t(item.key)}</span>
@@ -71,10 +73,4 @@ export function Sidebar({ className = '' }) {
 }
 
 export default Sidebar;
-
-
-
-
-
-
 

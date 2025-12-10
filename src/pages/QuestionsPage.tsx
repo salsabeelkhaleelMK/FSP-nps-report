@@ -1,52 +1,51 @@
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '@/hooks/useLanguage';
 import { Eye, Plus, ArrowDown, ArrowUp, Edit, Shuffle, Ban, ChevronDown } from 'lucide-react';
 
+const SERVICES = [
+  'Online purchase',
+  'Body Repair',
+  'Aftersale mobile',
+  'long term rental',
+  'Accessories',
+  'Purchase used vehicle',
+  'Purchase new vehicle',
+  'Trade-in',
+  'Short term rental',
+  'After sales',
+  'Technical control',
+  'Spare parts',
+  'Glazing',
+];
+
 /**
- * Questions Settings page - replicates the original page shown in the screenshot
+ * Questions Settings page
  */
-export function QuestionsSettings({ className = '' }) {
+export function QuestionsPage() {
   const { t } = useLanguage();
 
-  const services = [
-    'Online purchase',
-    'Body Repair',
-    'Aftersale mobile',
-    'long term rental',
-    'Accessories',
-    'Purchase used vehicle',
-    'Purchase new vehicle',
-    'Trade-in',
-    'Short term rental',
-    'After sales',
-    'Technical control',
-    'Spare parts',
-    'Glazing',
-  ];
-
   return (
-    <div className={`questions-settings ${className}`}>
+    <div className="questions-settings" data-testid="questions-page">
       <h1 className="page-title">{t('page_title_surveys')}</h1>
       
-      <div className="service-selector">
+      <div className="service-selector" data-testid="service-selector">
         <div className="service-selector-content">
           <label className="service-label">{t('service')}</label>
           <div className="select-wrapper large">
-            <select className="service-select">
-              <option>Online purchase</option>
-              {services.slice(1).map((s) => (
+            <select className="service-select" data-testid="service-select">
+              {SERVICES.map((s) => (
                 <option key={s}>{s}</option>
               ))}
             </select>
             <ChevronDown size={20} className="select-arrow" />
           </div>
         </div>
-        <button className="see-btn">
+        <button className="see-btn" data-testid="see-btn">
           <Eye size={18} />
           <span>{t('see')}</span>
         </button>
       </div>
 
-      <div className="questions-table">
+      <div className="questions-table" data-testid="questions-table">
         <div className="questions-table-header">
           <div className="col-number">#</div>
           <div className="col-title">{t('title')}</div>
@@ -54,7 +53,7 @@ export function QuestionsSettings({ className = '' }) {
           <div className="col-survey-type">{t('survey_type')}</div>
           <div className="col-service">
             {t('service')}
-            <button className="add-btn">
+            <button className="add-btn" data-testid="add-btn">
               <Plus size={16} />
               <span>{t('add')}</span>
             </button>
@@ -62,7 +61,7 @@ export function QuestionsSettings({ className = '' }) {
         </div>
 
         <div className="questions-table-body">
-          <div className="question-row">
+          <div className="question-row" data-testid="question-row">
             <div className="col-number">1</div>
             <div className="col-title">
               <div className="question-content">
@@ -78,16 +77,16 @@ export function QuestionsSettings({ className = '' }) {
             </div>
             <div className="col-service">
               <ul className="service-list">
-                {services.map((s) => (
+                {SERVICES.map((s) => (
                   <li key={s}>• {s}</li>
                 ))}
               </ul>
               <div className="row-actions">
-                <button className="action-btn down"><ArrowDown size={16} /></button>
-                <button className="action-btn up"><ArrowUp size={16} /></button>
-                <button className="action-btn edit"><Edit size={16} /></button>
-                <button className="action-btn shuffle"><Shuffle size={16} /></button>
-                <button className="action-btn ban"><Ban size={16} /></button>
+                <button className="action-btn down" data-testid="action-down"><ArrowDown size={16} /></button>
+                <button className="action-btn up" data-testid="action-up"><ArrowUp size={16} /></button>
+                <button className="action-btn edit" data-testid="action-edit"><Edit size={16} /></button>
+                <button className="action-btn shuffle" data-testid="action-shuffle"><Shuffle size={16} /></button>
+                <button className="action-btn ban" data-testid="action-ban"><Ban size={16} /></button>
               </div>
             </div>
           </div>
@@ -97,11 +96,5 @@ export function QuestionsSettings({ className = '' }) {
   );
 }
 
-export default QuestionsSettings;
-
-
-
-
-
-
+export default QuestionsPage;
 

@@ -1,9 +1,109 @@
 /**
- * Translation data for internationalization
- * Supports English (en) and Italian (it)
+ * Mock/Seed data for the application
+ * Isolated from store operations for easy replacement with API calls
  */
 
-export const TRANSLATIONS = {
+import type {
+  Trigger,
+  Survey,
+  SurveyType,
+  VoiceType,
+  EscalationTrigger,
+  AgentConfig,
+  Language,
+  AllTranslations,
+} from './types';
+
+// ============================================
+// Triggers Data
+// ============================================
+
+export const TRIGGERS: Trigger[] = [
+  { id: 'generic', key: 'Generic' },
+  { id: 'accessories', key: 'Accessories' },
+  { id: 'after_sales', key: 'After sales' },
+  { id: 'aftersale_mobile', key: 'Aftersale mobile' },
+  { id: 'body_repair', key: 'Body Repair' },
+  { id: 'online_purchase', key: 'Online purchase' },
+  { id: 'purchase_new_vehicle', key: 'Purchase new vehicle' },
+  { id: 'purchase_used_vehicle', key: 'Purchase used vehicle' },
+  { id: 'short_term_rental', key: 'Short term rental' },
+  { id: 'spare_parts', key: 'Spare parts' },
+  { id: 'technical_control', key: 'Technical control' },
+  { id: 'trade_in', key: 'Trade-in' },
+  { id: 'long_term_rental', key: 'long term rental' },
+];
+
+// ============================================
+// Surveys Data
+// ============================================
+
+export const SURVEYS: Survey[] = [
+  { id: 'nps_general', nameKey: 'survey_nps_general', type: 'NPS', description: 'General customer satisfaction survey' },
+  { id: 'nps_purchase', nameKey: 'survey_nps_purchase', type: 'NPS', description: 'Post-purchase satisfaction survey' },
+  { id: 'nps_service', nameKey: 'survey_nps_service', type: 'NPS', description: 'Service quality satisfaction survey' },
+  { id: 'csat_delivery', nameKey: 'survey_csat_delivery', type: 'CSAT', description: 'Delivery experience satisfaction' },
+  { id: 'csat_support', nameKey: 'survey_csat_support', type: 'CSAT', description: 'Customer support satisfaction' },
+  { id: 'ces_process', nameKey: 'survey_ces_process', type: 'CES', description: 'Process ease evaluation' },
+  { id: 'fidcar_certified', nameKey: 'survey_fidcar_certified', type: 'Fidcar', description: 'Fidcar Certified quality survey' },
+  { id: 'post_repair', nameKey: 'survey_post_repair', type: 'Quality', description: 'Post-repair quality check' },
+  { id: 'rental_experience', nameKey: 'survey_rental_experience', type: 'Experience', description: 'Rental service experience survey' },
+  { id: 'trade_in_feedback', nameKey: 'survey_trade_in_feedback', type: 'Feedback', description: 'Trade-in process feedback' },
+];
+
+export const SURVEY_TYPES: SurveyType[] = [
+  { id: 'NPS', label: 'Net Promoter Score' },
+  { id: 'CSAT', label: 'Customer Satisfaction' },
+  { id: 'CES', label: 'Customer Effort Score' },
+  { id: 'Fidcar', label: 'Fidcar Certified' },
+  { id: 'Quality', label: 'Quality Check' },
+  { id: 'Experience', label: 'Experience Survey' },
+  { id: 'Feedback', label: 'General Feedback' },
+];
+
+// ============================================
+// Voice & Agent Config Data
+// ============================================
+
+export const VOICE_TYPES: VoiceType[] = [
+  { id: 'male_1', nameKey: 'voice_male_1' },
+  { id: 'male_2', nameKey: 'voice_male_2' },
+  { id: 'female_1', nameKey: 'voice_female_1' },
+  { id: 'female_2', nameKey: 'voice_female_2' },
+  { id: 'neutral_1', nameKey: 'voice_neutral_1' },
+];
+
+export const ESCALATION_TRIGGERS: EscalationTrigger[] = [
+  { id: 'on_call_failure', labelKey: 'escalation_call_failure', descriptionKey: 'escalation_call_failure_desc', defaultEnabled: true },
+  { id: 'on_dissatisfaction', labelKey: 'escalation_dissatisfaction', descriptionKey: 'escalation_dissatisfaction_desc', defaultEnabled: false },
+  { id: 'on_verbal_complaint', labelKey: 'escalation_verbal_complaint', descriptionKey: 'escalation_verbal_complaint_desc', defaultEnabled: true },
+];
+
+export const DEFAULT_AGENT_CONFIG: AgentConfig = {
+  startAfterHours: 2,
+  retryIntervalHours: 3,
+  maxRetries: 5,
+  voiceType: 'male_1',
+  callWindowFrom: '09:00',
+  callWindowTo: '20:00',
+  personaScript: 'Hello, this is a follow-up call from our team regarding your recent inquiry. We wanted to reconnect and answer any questions you might have.',
+  escalationTriggers: {
+    on_call_failure: true,
+    on_dissatisfaction: false,
+    on_verbal_complaint: true,
+  },
+};
+
+// ============================================
+// Language Data
+// ============================================
+
+export const SUPPORTED_LANGUAGES: Language[] = [
+  { code: 'en', name: 'English', flag: '🇬🇧' },
+  { code: 'it', name: 'Italiano', flag: '🇮🇹' },
+];
+
+export const TRANSLATIONS: AllTranslations = {
   en: {
     // App header
     app_name: 'FidSpark',
@@ -23,38 +123,21 @@ export const TRANSLATIONS = {
     nav_users: 'Users',
     nav_network: 'Network',
     
-    // Top navigation tabs
-    tab_information: 'INFORMATION',
-    tab_zones: 'ZONES',
-    tab_responses: 'RESPONSES',
-    tab_general_reports: 'GENERAL REPORTS',
-    tab_model_review_reports: 'MODEL REVIEW REPORTS',
-    tab_promotions: 'PROMOTIONS',
-    tab_average_basket: 'AVERAGE BASKET',
-    tab_goals: 'GOALS',
-    
-    // Secondary tabs
-    tab_quality_surveys: 'QUALITY SURVEYS',
+    // Tabs
     tab_questions: 'QUESTIONS',
     tab_ai_agent: 'AI AGENT',
-    tab_pos_communications: 'POS COMMUNICATIONS',
-    tab_pos_options: 'POS OPTIONS',
-    tab_pos_tags: 'POS TAGS',
-    tab_pos_experts: 'POS EXPERTS',
-    tab_pos_blacklist: 'POS BLACKLIST',
     
     // Page titles
     page_title_surveys: 'SATISFACTION SURVEYS - QUESTIONS SETTINGS',
     page_title_ai_agent: 'AI AGENT CONFIGURATION',
     
     // AI Agent settings
-    ai_agent_description: 'Configure which surveys should be triggered by the AI Agent for each service type. Enable a trigger and select the appropriate survey to be sent automatically.',
+    ai_agent_description: 'Configure which surveys should be triggered by the AI Agent for each service type.',
     trigger_settings: 'Trigger Settings',
     trigger: 'Trigger',
     survey: 'Survey',
     enabled: 'Enabled',
     select_survey: 'Select a survey...',
-    no_survey: 'No survey assigned',
     save_settings: 'Save Settings',
     settings_saved: 'Settings saved successfully!',
     
@@ -85,20 +168,7 @@ export const TRANSLATIONS = {
     survey_rental_experience: 'Rental Experience Survey',
     survey_trade_in_feedback: 'Trade-in Feedback',
     
-    // Form labels
-    service: 'Service',
-    see: 'See',
-    add: 'ADD',
-    title: 'TITLE',
-    type_of_answer: 'TYPE OF ANSWER',
-    survey_type: 'SURVEY TYPE',
-    
-    // Language
-    language: 'Language',
-    english: 'English',
-    italian: 'Italian',
-    
-    // AI Agent Configuration Section
+    // Agent Configuration
     agent_configuration: 'AI Agent Configuration',
     agent_config_description: 'Configure the AI agent behavior, timing, and voice settings.',
     start_after_hours: 'Start After (hours)',
@@ -119,7 +189,7 @@ export const TRANSLATIONS = {
     voice_female_2: 'Female 2',
     voice_neutral_1: 'Neutral 1',
     
-    // Create Dispute When
+    // Escalation
     create_dispute_when: 'Create Dispute When',
     escalation_call_failure: 'On Call Failure',
     escalation_call_failure_desc: 'Escalate on failure',
@@ -127,6 +197,15 @@ export const TRANSLATIONS = {
     escalation_dissatisfaction_desc: 'Customer unhappy',
     escalation_verbal_complaint: 'On Verbal Complaint',
     escalation_verbal_complaint_desc: 'Complaint detected',
+    
+    // Form labels
+    service: 'Service',
+    see: 'See',
+    add: 'ADD',
+    title: 'TITLE',
+    type_of_answer: 'TYPE OF ANSWER',
+    survey_type: 'SURVEY TYPE',
+    language: 'Language',
   },
   
   it: {
@@ -148,38 +227,21 @@ export const TRANSLATIONS = {
     nav_users: 'Utenti',
     nav_network: 'Rete',
     
-    // Top navigation tabs
-    tab_information: 'INFORMAZIONI',
-    tab_zones: 'ZONE',
-    tab_responses: 'RISPOSTE',
-    tab_general_reports: 'RAPPORTI GENERALI',
-    tab_model_review_reports: 'RAPPORTI MODELLO RECENSIONE',
-    tab_promotions: 'PROMOZIONI',
-    tab_average_basket: 'CARRELLO MEDIO',
-    tab_goals: 'OBIETTIVI',
-    
-    // Secondary tabs
-    tab_quality_surveys: 'SONDAGGI QUALITÀ',
+    // Tabs
     tab_questions: 'DOMANDE',
     tab_ai_agent: 'AGENTE AI',
-    tab_pos_communications: 'COMUNICAZIONI POS',
-    tab_pos_options: 'OPZIONI POS',
-    tab_pos_tags: 'TAG POS',
-    tab_pos_experts: 'ESPERTI POS',
-    tab_pos_blacklist: 'LISTA NERA POS',
     
     // Page titles
     page_title_surveys: 'SONDAGGI DI SODDISFAZIONE - IMPOSTAZIONI DOMANDE',
     page_title_ai_agent: 'CONFIGURAZIONE AGENTE AI',
     
     // AI Agent settings
-    ai_agent_description: 'Configura quali sondaggi devono essere attivati dall\'Agente AI per ogni tipo di servizio. Abilita un trigger e seleziona il sondaggio appropriato da inviare automaticamente.',
+    ai_agent_description: 'Configura quali sondaggi devono essere attivati dall\'Agente AI per ogni tipo di servizio.',
     trigger_settings: 'Impostazioni Trigger',
     trigger: 'Trigger',
     survey: 'Sondaggio',
     enabled: 'Abilitato',
     select_survey: 'Seleziona un sondaggio...',
-    no_survey: 'Nessun sondaggio assegnato',
     save_settings: 'Salva Impostazioni',
     settings_saved: 'Impostazioni salvate con successo!',
     
@@ -210,20 +272,7 @@ export const TRANSLATIONS = {
     survey_rental_experience: 'Sondaggio Esperienza Noleggio',
     survey_trade_in_feedback: 'Feedback Permuta',
     
-    // Form labels
-    service: 'Servizio',
-    see: 'Vedi',
-    add: 'AGGIUNGI',
-    title: 'TITOLO',
-    type_of_answer: 'TIPO DI RISPOSTA',
-    survey_type: 'TIPO SONDAGGIO',
-    
-    // Language
-    language: 'Lingua',
-    english: 'Inglese',
-    italian: 'Italiano',
-    
-    // AI Agent Configuration Section
+    // Agent Configuration
     agent_configuration: 'Configurazione Agente AI',
     agent_config_description: 'Configura il comportamento, i tempi e le impostazioni vocali dell\'agente AI.',
     start_after_hours: 'Inizia Dopo (ore)',
@@ -244,7 +293,7 @@ export const TRANSLATIONS = {
     voice_female_2: 'Femminile 2',
     voice_neutral_1: 'Neutro 1',
     
-    // Create Dispute When
+    // Escalation
     create_dispute_when: 'Crea Contestazione Quando',
     escalation_call_failure: 'Su Chiamata Fallita',
     escalation_call_failure_desc: 'Escalation su fallimento',
@@ -252,32 +301,15 @@ export const TRANSLATIONS = {
     escalation_dissatisfaction_desc: 'Cliente insoddisfatto',
     escalation_verbal_complaint: 'Su Reclamo Verbale',
     escalation_verbal_complaint_desc: 'Reclamo rilevato',
+    
+    // Form labels
+    service: 'Servizio',
+    see: 'Vedi',
+    add: 'AGGIUNGI',
+    title: 'TITOLO',
+    type_of_answer: 'TIPO DI RISPOSTA',
+    survey_type: 'TIPO SONDAGGIO',
+    language: 'Lingua',
   },
 };
-
-/**
- * Get translation by key
- * @param {string} lang - Language code (en/it)
- * @param {string} key - Translation key
- * @returns {string} Translated string
- */
-export function getTranslation(lang, key) {
-  return TRANSLATIONS[lang]?.[key] || TRANSLATIONS.en[key] || key;
-}
-
-/**
- * Get all translations for a language
- * @param {string} lang - Language code
- * @returns {Object} All translations for the language
- */
-export function getLanguageTranslations(lang) {
-  return TRANSLATIONS[lang] || TRANSLATIONS.en;
-}
-
-export const SUPPORTED_LANGUAGES = [
-  { code: 'en', name: 'English', flag: '🇬🇧' },
-  { code: 'it', name: 'Italiano', flag: '🇮🇹' },
-];
-
-export default TRANSLATIONS;
 

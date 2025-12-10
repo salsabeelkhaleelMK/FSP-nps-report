@@ -1,10 +1,10 @@
 import { memo } from 'react';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '@/hooks/useLanguage';
 import { ChevronDown } from 'lucide-react';
+import type { TriggerConfigRowProps } from '@/lib/types';
 
 /**
  * Individual trigger configuration row
- * Memoized for performance with many triggers
  */
 export const TriggerConfigRow = memo(function TriggerConfigRow({
   trigger,
@@ -13,15 +13,17 @@ export const TriggerConfigRow = memo(function TriggerConfigRow({
   selectedSurveyId,
   onToggle,
   onSurveyChange,
-}) {
+}: TriggerConfigRowProps) {
   const { t } = useLanguage();
   
-  // Convert trigger key to translation key
   const triggerTranslationKey = `trigger_${trigger.id}`;
   const triggerLabel = t(triggerTranslationKey) || trigger.key;
 
   return (
-    <div className={`trigger-row ${isEnabled ? 'enabled' : ''}`}>
+    <div 
+      className={`trigger-row ${isEnabled ? 'enabled' : ''}`}
+      data-testid={`trigger-row-${trigger.id}`}
+    >
       <div className="trigger-checkbox-cell">
         <label className="checkbox-wrapper">
           <input
@@ -29,6 +31,7 @@ export const TriggerConfigRow = memo(function TriggerConfigRow({
             checked={isEnabled}
             onChange={(e) => onToggle(trigger.id, e.target.checked)}
             aria-label={`Enable ${triggerLabel}`}
+            data-testid={`trigger-checkbox-${trigger.id}`}
           />
           <span className="checkbox-custom" />
         </label>
@@ -46,6 +49,7 @@ export const TriggerConfigRow = memo(function TriggerConfigRow({
             disabled={!isEnabled}
             className="survey-select"
             aria-label={`Select survey for ${triggerLabel}`}
+            data-testid={`trigger-select-${trigger.id}`}
           >
             <option value="">{t('select_survey')}</option>
             {surveys.map((survey) => (
@@ -62,10 +66,4 @@ export const TriggerConfigRow = memo(function TriggerConfigRow({
 });
 
 export default TriggerConfigRow;
-
-
-
-
-
-
 

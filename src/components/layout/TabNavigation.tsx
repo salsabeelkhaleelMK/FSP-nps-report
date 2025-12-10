@@ -1,7 +1,8 @@
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '@/hooks/useLanguage';
 import { AlertCircle, Bot } from 'lucide-react';
+import type { TabNavigationProps, TabItem } from '@/lib/types';
 
-const TABS = [
+const TABS: TabItem[] = [
   { id: 'questions', key: 'tab_questions', icon: AlertCircle },
   { id: 'ai_agent', key: 'tab_ai_agent', icon: Bot },
 ];
@@ -9,11 +10,11 @@ const TABS = [
 /**
  * Secondary tab navigation component
  */
-export function TabNavigation({ activeTab, onTabChange, className = '' }) {
+export function TabNavigation({ activeTab, onTabChange, className = '' }: TabNavigationProps) {
   const { t } = useLanguage();
 
   return (
-    <div className={`tab-navigation ${className}`}>
+    <div className={`tab-navigation ${className}`} data-testid="tab-navigation">
       {TABS.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;
@@ -25,6 +26,7 @@ export function TabNavigation({ activeTab, onTabChange, className = '' }) {
             onClick={() => onTabChange(tab.id)}
             aria-selected={isActive}
             role="tab"
+            data-testid={`tab-${tab.id}`}
           >
             {tab.hasAlert && <span className="tab-alert-dot" />}
             <Icon size={16} strokeWidth={1.5} />

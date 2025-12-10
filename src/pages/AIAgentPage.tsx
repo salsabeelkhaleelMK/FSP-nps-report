@@ -1,41 +1,33 @@
 import { useState, useCallback, useMemo } from 'react';
-import { useLanguage } from '../context/LanguageContext';
-import { TriggerConfigRow } from './TriggerConfigRow';
-import { CollapsibleSection } from './CollapsibleSection';
-import { ToggleSwitch } from './ToggleSwitch';
-import { TRIGGERS } from '../data/triggers';
-import { SURVEYS } from '../data/surveys';
-import { VOICE_TYPES, ESCALATION_TRIGGERS, DEFAULT_AGENT_CONFIG } from '../data/agentConfig';
+import { useLanguage } from '@/hooks/useLanguage';
+import { CollapsibleSection, ToggleSwitch } from '@/components/ui';
+import { TriggerConfigRow } from '@/components/ai-agent';
+import { 
+  TRIGGERS, 
+  SURVEYS, 
+  VOICE_TYPES, 
+  ESCALATION_TRIGGERS,
+} from '@/lib/mockData';
+import { 
+  getInitialTriggerConfig, 
+  getAgentConfig,
+  saveTriggerConfig,
+  saveAgentConfig,
+} from '@/lib/agentConfigStore';
+import type { TriggerConfigMap, AgentConfig } from '@/lib/types';
 import { Bot, Save, Check, Clock, ChevronDown } from 'lucide-react';
 
 /**
- * AI Agent Settings page component
- * Manages trigger-survey configuration and agent settings
+ * AI Agent Settings page
  */
-export function AIAgentSettings({ className = '' }) {
+export function AIAgentPage() {
   const { t } = useLanguage();
   const [showSaveSuccess, setShowSaveSuccess] = useState(false);
   
-  // Trigger configuration state
-  const [triggerConfig, setTriggerConfig] = useState(() => {
-    const initial = {};
-    TRIGGERS.forEach((trigger) => {
-      initial[trigger.id] = {
-        enabled: false,
-        surveyId: null,
-      };
-    });
-    // Set some defaults for demonstration
-    initial['online_purchase'] = { enabled: true, surveyId: 'nps_purchase' };
-    initial['after_sales'] = { enabled: true, surveyId: 'nps_service' };
-    initial['body_repair'] = { enabled: true, surveyId: 'post_repair' };
-    return initial;
-  });
+  const [triggerConfig, setTriggerConfig] = useState<TriggerConfigMap>(getInitialTriggerConfig);
+  const [agentConfig, setAgentConfig] = useState<AgentConfig>(getAgentConfig);
 
-  // Agent configuration state
-  const [agentConfig, setAgentConfig] = useState(DEFAULT_AGENT_CONFIG);
-
-  const handleToggle = useCallback((triggerId, enabled) => {
+  const handleToggle = useCallback((triggerId: string, enabled: boolean) => {
     setTriggerConfig((prev) => ({
       ...prev,
       [triggerId]: {
@@ -46,7 +38,7 @@ export function AIAgentSettings({ className = '' }) {
     }));
   }, []);
 
-  const handleSurveyChange = useCallback((triggerId, surveyId) => {
+  const handleSurveyChange = useCallback((triggerId: string, surveyId: string | null) => {
     setTriggerConfig((prev) => ({
       ...prev,
       [triggerId]: {
@@ -56,14 +48,14 @@ export function AIAgentSettings({ className = '' }) {
     }));
   }, []);
 
-  const handleAgentConfigChange = useCallback((field, value) => {
+  const handleAgentConfigChange = useCallback((field: keyof AgentConfig, value: AgentConfig[keyof AgentConfig]) => {
     setAgentConfig((prev) => ({
       ...prev,
       [field]: value,
     }));
   }, []);
 
-  const handleEscalationToggle = useCallback((triggerId, enabled) => {
+  const handleEscalationToggle = useCallback((triggerId: string, enabled: boolean) => {
     setAgentConfig((prev) => ({
       ...prev,
       escalationTriggers: {
@@ -74,7 +66,8 @@ export function AIAgentSettings({ className = '' }) {
   }, []);
 
   const handleSave = useCallback(() => {
-    console.log('Saving configuration:', { triggerConfig, agentConfig });
+    saveTriggerConfig(triggerConfig);
+    saveAgentConfig(agentConfig);
     setShowSaveSuccess(true);
     setTimeout(() => setShowSaveSuccess(false), 3000);
   }, [triggerConfig, agentConfig]);
@@ -84,7 +77,7 @@ export function AIAgentSettings({ className = '' }) {
   }, [triggerConfig]);
 
   return (
-    <div className={`ai-agent-settings ${className}`}>
+    <div className="ai-agent-settings" data-testid="ai-agent-page">
       <div className="settings-header">
         <div className="settings-title-section">
           <div className="settings-icon">
@@ -97,12 +90,13 @@ export function AIAgentSettings({ className = '' }) {
         </div>
         
         <div className="settings-actions">
-          <span className="enabled-count">
+          <span className="enabled-count" data-testid="enabled-count">
             {enabledCount} / {TRIGGERS.length} {t('enabled').toLowerCase()}
           </span>
           <button 
             className={`save-btn ${showSaveSuccess ? 'success' : ''}`}
             onClick={handleSave}
+            data-testid="save-btn"
           >
             {showSaveSuccess ? (
               <>
@@ -119,8 +113,8 @@ export function AIAgentSettings({ className = '' }) {
         </div>
       </div>
 
-      {/* Trigger Settings Section - Collapsible (Now on top) */}
-      <div className="settings-card">
+      {/* Trigger Settings Section */}
+      <div className="settings-card" data-testid="trigger-settings-card">
         <CollapsibleSection title={t('trigger_settings')} defaultOpen={false}>
           <div className="trigger-table">
             <div className="trigger-table-header">
@@ -153,7 +147,7 @@ export function AIAgentSettings({ className = '' }) {
       </div>
 
       {/* Agent Configuration Section */}
-      <div className="settings-card agent-config-card">
+      <div className="settings-card agent-config-card" data-testid="agent-config-card">
         <div className="settings-card-header">
           <h2>{t('agent_configuration')}</h2>
         </div>
@@ -170,6 +164,7 @@ export function AIAgentSettings({ className = '' }) {
                 onChange={(e) => handleAgentConfigChange('startAfterHours', parseInt(e.target.value) || 0)}
                 min="0"
                 className="config-input"
+                data-testid="input-start-after"
               />
               <span className="field-hint">{t('start_after_hours_hint')}</span>
             </div>
@@ -183,6 +178,7 @@ export function AIAgentSettings({ className = '' }) {
                 onChange={(e) => handleAgentConfigChange('retryIntervalHours', parseInt(e.target.value) || 0)}
                 min="0"
                 className="config-input"
+                data-testid="input-retry-interval"
               />
               <span className="field-hint">{t('retry_interval_hours_hint')}</span>
             </div>
@@ -196,6 +192,7 @@ export function AIAgentSettings({ className = '' }) {
                 onChange={(e) => handleAgentConfigChange('maxRetries', parseInt(e.target.value) || 0)}
                 min="0"
                 className="config-input"
+                data-testid="input-max-retries"
               />
             </div>
             
@@ -207,6 +204,7 @@ export function AIAgentSettings({ className = '' }) {
                   value={agentConfig.voiceType}
                   onChange={(e) => handleAgentConfigChange('voiceType', e.target.value)}
                   className="config-select"
+                  data-testid="select-voice-type"
                 >
                   {VOICE_TYPES.map((voice) => (
                     <option key={voice.id} value={voice.id}>
@@ -227,6 +225,7 @@ export function AIAgentSettings({ className = '' }) {
                   value={agentConfig.callWindowFrom}
                   onChange={(e) => handleAgentConfigChange('callWindowFrom', e.target.value)}
                   className="config-input time-input"
+                  data-testid="input-call-from"
                 />
                 <Clock size={16} className="time-icon" />
               </div>
@@ -241,6 +240,7 @@ export function AIAgentSettings({ className = '' }) {
                   value={agentConfig.callWindowTo}
                   onChange={(e) => handleAgentConfigChange('callWindowTo', e.target.value)}
                   className="config-input time-input"
+                  data-testid="input-call-to"
                 />
                 <Clock size={16} className="time-icon" />
               </div>
@@ -255,11 +255,12 @@ export function AIAgentSettings({ className = '' }) {
               onChange={(e) => handleAgentConfigChange('personaScript', e.target.value)}
               className="config-textarea"
               rows={4}
+              data-testid="textarea-persona-script"
             />
             <span className="field-hint">{t('persona_script_hint')}</span>
           </div>
           
-          <div className="escalation-section">
+          <div className="escalation-section" data-testid="escalation-section">
             <h3>{t('create_dispute_when')}</h3>
             <div className="escalation-triggers">
               {ESCALATION_TRIGGERS.map((trigger) => (
@@ -280,4 +281,5 @@ export function AIAgentSettings({ className = '' }) {
   );
 }
 
-export default AIAgentSettings;
+export default AIAgentPage;
+
