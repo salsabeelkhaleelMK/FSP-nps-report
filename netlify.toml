@@ -1,0 +1,28 @@
+# Netlify configuration
+# Option A: Skip build entirely - deploy pre-built dist folder
+[build]
+  publish = "dist"
+  command = "echo 'Skipping build - using pre-built files'"
+
+# If you want Netlify to build (uses build minutes), use this instead:
+# [build]
+#   publish = "dist"
+#   command = "npm run build"
+
+# Headers for proper MIME types
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Content-Type = "application/javascript; charset=utf-8"
+
+[[headers]]
+  for = "/assets/*.js"
+  [headers.values]
+    Content-Type = "application/javascript; charset=utf-8"
+
+# SPA redirect - all routes go to index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
